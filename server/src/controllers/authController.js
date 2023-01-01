@@ -28,7 +28,7 @@ const handleLogin = async (req, res, next) => {
         }
 
         // token cookie
-        const token = createJSONWebToken(user, jwtAccessKey, "10m");
+        const accessToken = createJSONWebToken({ email }, jwtAccessKey, "10m");
 
         return successResponse(res, {
             statusCode: 200,
