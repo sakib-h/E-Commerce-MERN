@@ -1,10 +1,22 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const createError = require("http-errors");
+const xssClean = require("xss-clean");
+const rateLimit = require("express-rate-limit");
 const app = express();
+
+// rate limiter
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 10, // 10 requests,
+    message: "Too many requests, please try again later.", // message to send
+});
 
 // express middleware
 app.use(morgan("dev"));
+app.use(xssClean());
+app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -23,16 +35,14 @@ app.get("/api/user", (req, res) => {
 
 //  client error handling
 app.use((req, res, next) => {
-    res.status(404).send({
-        message: "Page not found",
-    });
-    next();
+    next(createError(404, "Page not found"));
 });
 
 // server error handling
 app.use((err, req, res, next) => {
-    res.status(500).send({
-        message: "Something went wrong",
+    return res.status(err.status || 500).json({
+        success: false,
+        message: err.message,
     });
 });
 

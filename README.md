@@ -8,4 +8,5 @@
 4.  Nodemon and morgan package. --> Nodemon & Morgan
 5.  Api testing with Postman.
 6.  Express Error handling Middleware. --> body-parser
-7.  Handle HTTP errors. --> http-errors.
+7.  Handle HTTP errors. --> http-errors
+8.  Secure API --> xss-clean express-rate-limit
