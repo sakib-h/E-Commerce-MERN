@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const createError = require("http-errors");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
+const userRouter = require("./routers/userRouter");
 const app = express();
 
 // rate limiter
@@ -20,18 +21,8 @@ app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/test", (req, res) => {
-    res.status(200).send({
-        message: "Hello World!",
-    });
-});
-
-app.get("/api/user", (req, res) => {
-    console.log(req.body.id);
-    res.status(200).send({
-        message: "User Profile is Returned",
-    });
-});
+// Users Router
+app.use("/api/users", userRouter);
 
 //  client error handling
 app.use((req, res, next) => {

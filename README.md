@@ -10,3 +10,5 @@
 6.  Express Error handling Middleware. --> body-parser
 7.  Handle HTTP errors. --> http-errors
 8.  Secure API --> xss-clean express-rate-limit
+9.  ENV Variable --> dotenv
+10. MVC Architecture
