@@ -5,6 +5,7 @@ const createError = require("http-errors");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const userRouter = require("./routers/userRouter");
+const seedRouter = require("./routers/seedRouter");
 const app = express();
 
 // rate limiter
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Users Router
 app.use("/api/users", userRouter);
+app.use("/api/seed", seedRouter);
 
 //  client error handling
 app.use((req, res, next) => {
