@@ -11,4 +11,6 @@
 7.  Handle HTTP errors. --> http-errors
 8.  Secure API --> xss-clean express-rate-limit
 9.  ENV Variable --> dotenv
-10. MVC Architecture
+10. MVC Architecture.
+11. Connect to MongoDB.
+12. Schema & Model for user.
