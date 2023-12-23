@@ -14,6 +14,15 @@ const data = {
             password: "123456",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
+            isAdmin: false,
+        },
+        {
+            name: "Shakil Ahmed",
+            email: "sakilahmed@gmail.com",
+            password: "123456",
+            phone: "01700000000",
+            address: "Dhaka, Bangladesh",
+            isAdmin: false,
         },
     ],
 };

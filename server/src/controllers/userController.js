@@ -48,13 +48,13 @@ const getUsers = async (req, res, next) => {
     }
 };
 
-const getUser = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
         const options = {
             password: 0,
         };
-        const user = await findWithId(id, options);
+        const user = await findWithId(User, id, options);
         return successResponse(res, {
             statusCode: 200,
             message: "User return successfully",
@@ -67,22 +67,27 @@ const getUser = async (req, res, next) => {
     }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
         const options = { password: 0 };
-        const user = await findWithId(id, options);
+        const user = await findWithId(User, id, options);
         const userImagePath = user.image;
         fs.access(userImagePath, (err) => {
             if (!err) {
                 fs.unlink(userImagePath, (err) => {
                     if (err) throw err;
+                    console.log("User Image was deleted");
                 });
             } else {
                 console.error("User Image does not exists");
             }
         });
-        await user.remove();
+        await User.findByIdAndDelete({
+            _id: id,
+            isAdmin: false,
+        });
+
         return successResponse(res, {
             statusCode: 200,
             message: "User deleted successfully",
@@ -92,4 +97,4 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
-module.exports = { getUsers, getUser, deleteUser };
+module.exports = { getUsers, getUserById, deleteUserById };
