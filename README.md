@@ -16,3 +16,4 @@
 12. Schema & Model for user.
 13. Response Handler for error or success
 14. GET /api/users/:id --> get a single user by id
+15. Create services in backend
