@@ -5,7 +5,7 @@ const createError = require("http-errors");
 const findWithId = async (id, options = {}) => {
     try {
         const res = await User.findById(id, options);
-        if (!res) throw createError(404, "Result not found");
+        if (!res) throw createError(404, "Doesn't Exist");
         return res;
     } catch (error) {
         if (error instanceof mongoose.error) {

@@ -17,3 +17,4 @@
 13. Response Handler for error or success
 14. GET /api/users/:id --> get a single user by id
 15. Create services in backend
+16. DELETE /api/users/:id --> delete a single user by id.
