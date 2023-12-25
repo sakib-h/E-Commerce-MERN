@@ -4,6 +4,8 @@ const User = require("../models/userModel");
 const { successResponse } = require("./responseController");
 const { findWithId } = require("../services/findItem");
 const { deleteImage } = require("../helper/deleteImage");
+const { createJSONWebToken } = require("../helper/jsonWebToken");
+const { jwtActivationKey, clientURL } = require("../secret");
 
 const getUsers = async (req, res, next) => {
     try {
@@ -101,18 +103,31 @@ const processRegister = async (req, res, next) => {
             );
         }
 
-        const newUser = {
-            name,
-            email,
-            password,
-            phone,
-            address,
+        // create JWT
+        const token = createJSONWebToken(
+            { name, email, password, phone, address },
+            jwtActivationKey,
+            "60m"
+        );
+
+        // Prepare email
+        const emailData = {
+            email: email,
+            subject: "Please confirm your email",
+            html: `
+                <h2>Hello ${name},</h2>
+                <p>Please click here to <a href="${clientURL}/api/users/activate/${token}" target="_blank">Activate your account </a>  account. </p>
+            
+            `,
         };
+
+        // Send Email
+
         return successResponse(res, {
             statusCode: 200,
             message: "User registered successfully",
             payload: {
-                newUser,
+                token,
             },
         });
     } catch (error) {
