@@ -18,4 +18,7 @@
 14. GET /api/users/:id --> get a single user by id
 15. Create services in backend
 16. DELETE /api/users/:id --> delete a single user by id.
-17. Delete user Image service.
+17. Delete user Image helper.
+18. POST /api/users/precess-register --> Registration process start.
+19. POST /api/users/verify --> Verify and register into database.
+20. add express validator middleware.

@@ -1,8 +1,9 @@
 const createError = require("http-errors");
-const fs = require("fs");
+const fs = require("fs").promises;
 const User = require("../models/userModel");
 const { successResponse } = require("./responseController");
 const { findWithId } = require("../services/findItem");
+const { deleteImage } = require("../helper/deleteImage");
 
 const getUsers = async (req, res, next) => {
     try {
@@ -73,16 +74,8 @@ const deleteUserById = async (req, res, next) => {
         const options = { password: 0 };
         const user = await findWithId(User, id, options);
         const userImagePath = user.image;
-        fs.access(userImagePath, (err) => {
-            if (!err) {
-                fs.unlink(userImagePath, (err) => {
-                    if (err) throw err;
-                    console.log("User Image was deleted");
-                });
-            } else {
-                console.error("User Image does not exists");
-            }
-        });
+
+        deleteImage(userImagePath);
         await User.findByIdAndDelete({
             _id: id,
             isAdmin: false,
@@ -97,4 +90,34 @@ const deleteUserById = async (req, res, next) => {
     }
 };
 
-module.exports = { getUsers, getUserById, deleteUserById };
+const processRegister = async (req, res, next) => {
+    try {
+        const { name, email, password, phone, address } = req.body;
+        const userExists = await User.exists({ email: email });
+        if (userExists) {
+            throw createError(
+                409,
+                " User with this email address already exists. Please sign in."
+            );
+        }
+
+        const newUser = {
+            name,
+            email,
+            password,
+            phone,
+            address,
+        };
+        return successResponse(res, {
+            statusCode: 200,
+            message: "User registered successfully",
+            payload: {
+                newUser,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getUsers, getUserById, deleteUserById, processRegister };
