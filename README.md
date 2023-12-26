@@ -22,6 +22,6 @@
 18. POST /api/users/precess-register --> Registration process start.
 19. Create JWT.
 20. Setup SMTP server & prepare mail.
-21. Send Email with JWT token.
+21. Send Email with nodemailer.
 22. POST /api/users/verify --> Verify and register into database.
 23. add express validator middleware.
