@@ -153,6 +153,16 @@ const activateUserAccount = async (req, res, next) => {
                     401,
                     "Failed to verify user, please try again letter"
                 );
+            const userExists = await User.exists({ email: decoded.email });
+
+            userExists &&
+                next(
+                    createError(
+                        401,
+                        " User with this email address already exists. Please sign in."
+                    )
+                );
+
             const user = await User.create(decoded);
             if (!user) throw createError(500, "Failed to create user");
             return successResponse(res, {
