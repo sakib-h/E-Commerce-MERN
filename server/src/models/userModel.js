@@ -38,6 +38,7 @@ const usersSchema = new Schema(
         address: {
             type: String,
             required: [true, "User Address is required"],
+            minLength: [3, "Address cannot be less than 3 characters"],
         },
         phone: {
             type: String,
