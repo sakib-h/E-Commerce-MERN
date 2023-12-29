@@ -19,8 +19,7 @@ const sendEmailWithNodemailer = async (emailData) => {
             subject: emailData.subject, // Subject line
             html: emailData.html, // html body
         };
-        const res = await transporter.sendMail(mailOptions);
-        console.log("Message sent: %s", res.response);
+        await transporter.sendMail(mailOptions);
     } catch (error) {
         console.error("Something wen wrong: ", error);
         throw error;
