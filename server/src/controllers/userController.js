@@ -96,6 +96,9 @@ const deleteUserById = async (req, res, next) => {
 const processRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
+        const imageBufferString = req.file.buffer.toString("base64");
+        if (!req.file) {
+        }
         const userExists = await User.exists({ email: email });
         if (userExists) {
             throw createError(
@@ -106,7 +109,7 @@ const processRegister = async (req, res, next) => {
 
         // create JWT
         const token = createJSONWebToken(
-            { name, email, password, phone, address },
+            { name, email, password, phone, address, image: imageBufferString },
             jwtActivationKey,
             "60m"
         );

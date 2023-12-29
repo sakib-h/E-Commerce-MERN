@@ -40,7 +40,11 @@ const validateUserRegistration = [
         .notEmpty()
         .withMessage("Phone is required. Please enter your phone number"),
 
-    body("image").optional().isString().withMessage("Image must be a string"),
+    body("image")
+        .notEmpty()
+        .withMessage("Image is required. Please upload your image")
+        .isString()
+        .withMessage("Image must be a string"),
 ];
 
 module.exports = { validateUserRegistration };
