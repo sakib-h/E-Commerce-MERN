@@ -184,10 +184,13 @@ const activateUserAccount = async (req, res, next) => {
     }
 };
 
+const updateUserById = async (req, res, next) => {};
+
 module.exports = {
     getUsers,
     getUserById,
     deleteUserById,
     processRegister,
     activateUserAccount,
+    updateUserById,
 };

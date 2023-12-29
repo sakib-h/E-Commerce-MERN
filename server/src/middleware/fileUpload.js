@@ -5,7 +5,10 @@ const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     if (!file.mimetype.startsWith("image/")) {
-        return cb(new Error("Please upload an image"), false);
+        return cb(
+            new Error("Unsupported image format. Only image files are allowed"),
+            false
+        );
     }
     if (file.size > MAX_FILE_SIZE) {
         return cb(new Error("File size should be less than 2MB"), false);

@@ -4,7 +4,7 @@ const validateUserRegistration = [
     body("name")
         .trim()
         .notEmpty()
-        .withMessage("Name is required. Plesae enter your name")
+        .withMessage("Name is required. Please enter your name")
         .isLength({ min: 3, max: 32 })
         .withMessage("Name must be between 3 to 32 characters long"),
 
@@ -41,10 +41,13 @@ const validateUserRegistration = [
         .withMessage("Phone is required. Please enter your phone number"),
 
     body("image")
-        .notEmpty()
-        .withMessage("Image is required. Please upload your image")
-        .isString()
-        .withMessage("Image must be a string"),
+        .custom((value, { req }) => {
+            if (!req.file || !req.file.buffer) {
+                throw new Error("Image is required. Please upload an image");
+            }
+            return true;
+        })
+        .withMessage("Image is required. Please upload an image"),
 ];
 
 module.exports = { validateUserRegistration };

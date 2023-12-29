@@ -24,5 +24,8 @@
 20. Setup SMTP server & prepare mail.
 21. Send Email with nodemailer.
 22. POST /api/users/verify --> Verify and register into database.
-23. Image upload with multer.
-24. add express validator middleware.
+23. Add multer middleware for file upload.
+24. Filtering files by size and types.
+25. add express validator middleware.
+26. Upload image as buffer.
+27. PUT/api/users/:id --> update a single user by id.
