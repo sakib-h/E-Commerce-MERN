@@ -6,6 +6,7 @@ const data = {
             password: "123456",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
+            image: "public/images/users/default-user.png",
             isAdmin: true,
         },
         {
@@ -14,6 +15,7 @@ const data = {
             password: "123456",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
+            image: "public/images/users/default-user.png",
             isAdmin: false,
         },
         {
@@ -22,6 +24,16 @@ const data = {
             password: "123456",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
+            image: "public/images/users/default-user.png",
+            isAdmin: false,
+        },
+        {
+            name: "Shamim Haque",
+            email: "shamim@gmail.com",
+            password: "123456",
+            phone: "01700000000",
+            address: "Dhaka, Bangladesh",
+            image: "public/images/users/default-user.png",
             isAdmin: false,
         },
     ],
