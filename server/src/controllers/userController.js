@@ -97,17 +97,6 @@ const processRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
 
-        const image = req.file;
-
-        if (image && image.size > 2097152) {
-            throw createError(
-                400,
-                "File too large! Image size must be less than 2MB"
-            );
-        }
-
-        const imageBufferString = image.buffer.toString("base64");
-
         const userExists = await User.exists({ email: email });
         if (userExists) {
             throw createError(
@@ -116,15 +105,26 @@ const processRegister = async (req, res, next) => {
             );
         }
 
-        // create JWT
         const tokenPayloadData = {
             name,
             email,
             password,
             phone,
             address,
-            image: imageBufferString,
         };
+        const image = req.file;
+
+        if (image && image.size < 2097152) {
+            tokenPayloadData.image = image.buffer.toString("base64");
+        } else if (image && image.size > 2097152) {
+            throw createError(
+                400,
+                "File too large! Image size must be less than 2MB"
+            );
+        }
+
+        // create JWT token
+
         const token = createJSONWebToken(
             tokenPayloadData,
             jwtActivationKey,
