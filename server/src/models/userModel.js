@@ -33,7 +33,7 @@ const usersSchema = new Schema(
         image: {
             type: Buffer,
             contentType: String,
-            required: [true, "User Image is required"],
+            default: "public/images/users/default-user.png",
         },
         address: {
             type: String,

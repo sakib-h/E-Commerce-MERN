@@ -40,14 +40,7 @@ const validateUserRegistration = [
         .notEmpty()
         .withMessage("Phone is required. Please enter your phone number"),
 
-    body("image")
-        .custom((value, { req }) => {
-            if (!req.file || !req.file.buffer) {
-                throw new Error("Image is required. Please upload an image");
-            }
-            return true;
-        })
-        .withMessage("Image is required. Please upload an image"),
+    body("image").optional().isString().withMessage("Invalid image file"),
 ];
 
 module.exports = { validateUserRegistration };

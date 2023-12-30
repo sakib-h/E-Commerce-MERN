@@ -6,7 +6,7 @@ const data = {
             password: "123456",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
-            image: "public/images/users/default-user.png",
+            // image: "public/images/users/default-user.png",
             isAdmin: true,
         },
         {
