@@ -29,3 +29,4 @@
 25. add express validator middleware.
 26. Upload image as buffer.
 27. PUT/api/users/:id --> update a single user by id.
+28. POST/api/auth/login --> Login User.

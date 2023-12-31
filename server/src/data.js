@@ -3,7 +3,7 @@ const data = {
         {
             name: "Sakib Hasan",
             email: "sakib100.sa@gmail.com",
-            password: "123456",
+            password: "Sakib@14168",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
             // image: "public/images/users/default-user.png",
@@ -12,7 +12,7 @@ const data = {
         {
             name: "Tanvir Ahmed",
             email: "tanvir@gmail.com",
-            password: "123456",
+            password: "Sakib@14168",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
             image: "public/images/users/default-user.png",
@@ -21,7 +21,7 @@ const data = {
         {
             name: "Shakil Ahmed",
             email: "sakilahmed@gmail.com",
-            password: "123456",
+            password: "Sakib@14168",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
             image: "public/images/users/default-user.png",
@@ -30,7 +30,7 @@ const data = {
         {
             name: "Shamim Haque",
             email: "shamim@gmail.com",
-            password: "123456",
+            password: "Sakib@14168",
             phone: "01700000000",
             address: "Dhaka, Bangladesh",
             image: "public/images/users/default-user.png",

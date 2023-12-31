@@ -114,13 +114,14 @@ const processRegister = async (req, res, next) => {
         };
         const image = req.file;
 
-        if (image && image.size < 2097152) {
+        if (image) {
+            if (image.size > 2097152) {
+                throw createError(
+                    400,
+                    "File too large! Image size must be less than 2MB"
+                );
+            }
             tokenPayloadData.image = image.buffer.toString("base64");
-        } else if (image && image.size > 2097152) {
-            throw createError(
-                400,
-                "File too large! Image size must be less than 2MB"
-            );
         }
 
         // create JWT token
@@ -205,7 +206,10 @@ const updateUserById = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const options = { password: 0 };
-        await findWithId(User, userId, options);
+        const user = await findWithId(User, userId, options);
+
+        if (!user) throw createError(404, "User with this id does not exists");
+
         const updateOptions = {
             new: true,
             runValidators: true,

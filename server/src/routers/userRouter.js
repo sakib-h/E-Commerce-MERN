@@ -20,7 +20,7 @@ userRouter.post(
     runValidation,
     processRegister
 );
-userRouter.post("/verify", activateUserAccount);
+userRouter.post("/activate", activateUserAccount);
 userRouter.get("/:id", getUserById);
 userRouter.delete("/:id", deleteUserById);
 userRouter.put("/:id", uploadUserImage.single("image"), updateUserById);
