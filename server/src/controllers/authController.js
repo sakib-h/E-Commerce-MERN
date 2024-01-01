@@ -33,7 +33,8 @@ const handleLogin = async (req, res, next) => {
         // Send the response
         res.cookies("token", accessToken, {
             httpOnly: true,
-            sameSite: "strict",
+            secure: true,
+            sameSite: "none",
             maxAge: 10 * 60 * 1000, // 10 minutes
         });
         return successResponse(res, {
