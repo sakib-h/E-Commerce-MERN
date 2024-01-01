@@ -30,6 +30,12 @@ const handleLogin = async (req, res, next) => {
         // token cookie
         const accessToken = createJSONWebToken({ email }, jwtAccessKey, "10m");
 
+        // Send the response
+        res.cookies("token", accessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            maxAge: 10 * 60 * 1000, // 10 minutes
+        });
         return successResponse(res, {
             statusCode: 200,
             message: "User Logged in successfully",
