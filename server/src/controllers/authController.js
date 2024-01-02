@@ -47,4 +47,10 @@ const handleLogin = async (req, res, next) => {
     }
 };
 
-module.exports = { handleLogin };
+const handleLogout = async (req, res, next) => {
+    try {
+    } catch (error) {
+        next(error);
+    }
+};
+module.exports = { handleLogin, handleLogout };
