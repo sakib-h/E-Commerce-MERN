@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const createError = require("http-errors");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
+const cookieParser = require("cookie-parser");
 const userRouter = require("./routers/userRouter");
 const seedRouter = require("./routers/seedRouter");
 const { errorResponse } = require("./controllers/responseController");
@@ -23,6 +24,7 @@ app.use(xssClean());
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Users Router
 app.use("/api/users", userRouter);
