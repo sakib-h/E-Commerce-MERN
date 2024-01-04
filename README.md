@@ -31,3 +31,5 @@
 27. PUT/api/users/:id --> update a single user by id.
 28. POST/api/auth/login --> Login User.
 29. POST/api/auth/logout --> User Logout.
+30. Middlewares --> isLoggedIn, isLoggedOut, isAdmin
+31. GET/api/auth/refresh --> refresh the token

@@ -49,6 +49,12 @@ const handleLogin = async (req, res, next) => {
 
 const handleLogout = async (req, res, next) => {
     try {
+        res.clearCookie("token");
+        successResponse(res, {
+            statusCode: 200,
+            message: "User Logged out successfully",
+            payload: {},
+        });
     } catch (error) {
         next(error);
     }
