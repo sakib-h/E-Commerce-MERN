@@ -31,7 +31,7 @@ const handleLogin = async (req, res, next) => {
         const accessToken = createJSONWebToken({ email }, jwtAccessKey, "10m");
 
         // Send the response
-        res.cookie("token", accessToken, {
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
