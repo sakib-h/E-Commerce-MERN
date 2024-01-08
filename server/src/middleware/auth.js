@@ -9,6 +9,14 @@ const isLoggedIn = async (req, res, next) => {
             throw createHttpError(401, "Access token not found.");
         }
         const decoded = jwt.verify(token, jwtAccessKey);
+        if (!decoded) {
+            throw createHttpError(
+                401,
+                "Invalid access token. Please try again."
+            );
+        }
+        req.body.userId = decoded._id;
+        next();
     } catch (error) {
         return next(error);
     }
