@@ -41,6 +41,13 @@ const isLoggedOut = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
     try {
+        if (req.user.isAdmin === false) {
+            throw createError(
+                401,
+                "You are not authorized to access this page."
+            );
+        }
+        next();
     } catch (error) {
         throw next(error);
     }
