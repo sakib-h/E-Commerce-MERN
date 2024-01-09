@@ -28,18 +28,14 @@ const handleLogin = async (req, res, next) => {
         }
 
         // token cookie
-        const accessToken = createJSONWebToken(
-            { _id: user._id },
-            jwtAccessKey,
-            "10m"
-        );
+        const accessToken = createJSONWebToken({ user }, jwtAccessKey, "15m");
 
         // Send the response
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 10 * 60 * 1000, // 10 minutes
+            maxAge: 15 * 60 * 1000, // 15 minutes
         });
         return successResponse(res, {
             statusCode: 200,
