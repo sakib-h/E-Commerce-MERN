@@ -6,6 +6,7 @@ const {
     processRegister,
     activateUserAccount,
     updateUserById,
+    banUserById,
 } = require("../controllers/userController");
 const uploadUserImage = require("../middleware/fileUpload");
 const { validateUserRegistration } = require("../validators/auth");
@@ -31,5 +32,6 @@ userRouter.put(
     isLoggedIn,
     updateUserById
 );
+userRouter.put("/ban-user/:id", isLoggedIn, isAdmin, banUserById);
 
 module.exports = userRouter;
