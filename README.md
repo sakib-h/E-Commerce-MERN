@@ -33,5 +33,5 @@
 29. POST/api/auth/logout --> User Logout.
 30. Middlewares --> isLoggedIn, isLoggedOut, isAdmin
 31. GET/api/auth/refresh --> refresh the token
-32. PUT/api/users/ban-user --> Ban user
-33. PUT/api/users/unban-user --> Unban user
+32. PUT/api/users/banned-user --> Banned user
+33. PUT/api/users/unbanned-user --> Unbanned user
