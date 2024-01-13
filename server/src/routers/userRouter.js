@@ -6,7 +6,8 @@ const {
     processRegister,
     activateUserAccount,
     updateUserById,
-    banUserById,
+    bannedUserById,
+    unBannedUserById,
 } = require("../controllers/userController");
 const uploadUserImage = require("../middleware/fileUpload");
 const { validateUserRegistration } = require("../validators/auth");
@@ -32,6 +33,7 @@ userRouter.put(
     isLoggedIn,
     updateUserById
 );
-userRouter.put("/ban-user/:id", isLoggedIn, isAdmin, banUserById);
+userRouter.put("/banned-user/:id", isLoggedIn, isAdmin, bannedUserById);
+userRouter.put("/unbanned-user/:id", isLoggedIn, isAdmin, unBannedUserById);
 
 module.exports = userRouter;
