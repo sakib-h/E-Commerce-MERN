@@ -273,7 +273,7 @@ const banUserById = async (req, res, next) => {
             updateOptions
         ).select("-password");
         if (!updatedUser) {
-            throw createError(404, "Failed to update user. Please try again");
+            throw createError(400, "Failed to banned user. Please try again");
         }
 
         return successResponse(res, {
