@@ -256,11 +256,14 @@ const updateUserById = async (req, res, next) => {
 const manageUserBannedStatus = async (req, res, next) => {
     try {
         const userId = req.params.id;
-        await findWithId(User, userId);
+        const action = req.body.action;
 
         const updates = {
-            isBanned: true,
+            isBanned:
+                (action === "banned" && true) ||
+                (action === "unbanned" && false),
         };
+
         const updateOptions = {
             new: true,
             runValidators: true,
@@ -273,12 +276,15 @@ const manageUserBannedStatus = async (req, res, next) => {
             updateOptions
         ).select("-password");
         if (!updatedUser) {
-            throw createError(400, "Failed to banned user. Please try again");
+            throw createError(
+                400,
+                `Failed to ${action} user. Please try again`
+            );
         }
 
         return successResponse(res, {
             statusCode: 200,
-            message: "User banned successfully",
+            message: `User ${action} successfully`,
             payload: updatedUser,
         });
     } catch (error) {
