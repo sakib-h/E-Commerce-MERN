@@ -258,6 +258,10 @@ const manageUserBannedStatus = async (req, res, next) => {
         const userId = req.params.id;
         const action = req.body.action;
 
+        if (!["banned", "unbanned"].includes(action)) {
+            throw createError(400, "Invalid action");
+        }
+
         const updates = {
             isBanned:
                 (action === "banned" && true) ||
