@@ -3,11 +3,10 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const { successResponse } = require("./responseController");
 const { findWithId } = require("../services/findItem");
-const { deleteImage } = require("../helper/deleteImage");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const sendEmailWithNodemailer = require("../helper/email");
-
+const { handleUserAction } = require("../services/userService");
 const getUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
@@ -75,7 +74,6 @@ const getUserById = async (req, res, next) => {
 const deleteUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const options = { password: 0 };
         await User.findByIdAndDelete({
             _id: id,
             isAdmin: false,
@@ -257,35 +255,8 @@ const manageUserBannedStatus = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const action = req.body.action;
-
-        if (!["banned", "unbanned"].includes(action)) {
-            throw createError(400, "Invalid action");
-        }
-
-        const updates = {
-            isBanned:
-                (action === "banned" && true) ||
-                (action === "unbanned" && false),
-        };
-
-        const updateOptions = {
-            new: true,
-            runValidators: true,
-            context: "query",
-        };
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            updates,
-            updateOptions
-        ).select("-password");
-        if (!updatedUser) {
-            throw createError(
-                400,
-                `Failed to ${action} user. Please try again`
-            );
-        }
-
+        const updatedUser = await handleUserAction(userId, action);
+        console.log(updatedUser);
         return successResponse(res, {
             statusCode: 200,
             message: `User ${action} successfully`,
