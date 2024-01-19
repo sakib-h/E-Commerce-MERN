@@ -6,31 +6,15 @@ const { findWithId } = require("../services/findItem");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const sendEmailWithNodemailer = require("../helper/email");
-const { handleUserAction } = require("../services/userService");
+const { handleUserAction, findUsers } = require("../services/userService");
 const getUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
-        const searchRegExp = new RegExp(".*" + search + ".*", "i");
-        const filter = {
-            isAdmin: {
-                $ne: true,
-            },
-            $or: [
-                { name: { $regex: searchRegExp } },
-                { email: { $regex: searchRegExp } },
-                { phone: { $regex: searchRegExp } },
-            ],
-        };
-        const options = { password: 0 };
-        const users = await User.find(filter, options)
-            .limit(limit)
-            .skip((page - 1) * limit);
 
-        const count = await User.find(filter).countDocuments();
+        const users = await findUsers(search, limit, page);
 
-        if (!users) throw createError(404, "No Users Found");
         return successResponse(res, {
             statusCode: 200,
             message: "User Profile is Returned",
