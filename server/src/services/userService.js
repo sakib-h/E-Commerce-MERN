@@ -23,21 +23,18 @@ const findUsers = async (search, limit, page) => {
 
         if (!users || users.length === 0)
             throw createError(404, "No Users Found");
-        return successResponse(res, {
-            statusCode: 200,
-            message: "User Profile is Returned",
-            payload: {
-                users,
-                pagination: {
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: page,
-                    previousPage: page - 1 > 0 ? page - 1 : null,
-                    nextPage:
-                        page + 1 <= Math.ceil(count / limit) ? page + 1 : null,
-                    totalUsers: count,
-                },
+
+        return {
+            users,
+            pagination: {
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                previousPage: page - 1 > 0 ? page - 1 : null,
+                nextPage:
+                    page + 1 <= Math.ceil(count / limit) ? page + 1 : null,
+                totalUsers: count,
             },
-        });
+        };
     } catch (error) {
         throw error;
     }
