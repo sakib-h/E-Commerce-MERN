@@ -6,7 +6,11 @@ const { findWithId } = require("../services/findItem");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const sendEmailWithNodemailer = require("../helper/email");
-const { handleUserAction, findUsers } = require("../services/userService");
+const {
+    handleUserAction,
+    findUsers,
+    findUserById,
+} = require("../services/userService");
 const getUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
@@ -30,18 +34,15 @@ const getUsers = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
     try {
-        console.log(req.user);
         const id = req.params.id;
         const options = {
             password: 0,
         };
-        const user = await findWithId(User, id, options);
+        const user = await findUserById(id, options);
         return successResponse(res, {
             statusCode: 200,
-            message: "User return successfully",
-            payload: {
-                user,
-            },
+            message: "User Profile is Returned",
+            payload: user,
         });
     } catch (error) {
         next(error);

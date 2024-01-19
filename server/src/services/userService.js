@@ -40,6 +40,16 @@ const findUsers = async (search, limit, page) => {
     }
 };
 
+const findUserById = async (id, options) => {
+    try {
+        const user = await User.findById(id, options);
+        if (!user) throw createError(404, "User not found");
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const handleUserAction = async (userId, action) => {
     try {
         if (!["banned", "unbanned"].includes(action)) {
@@ -76,4 +86,4 @@ const handleUserAction = async (userId, action) => {
     }
 };
 
-module.exports = { findUsers, handleUserAction };
+module.exports = { findUsers, findUserById, handleUserAction };
