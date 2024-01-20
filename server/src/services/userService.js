@@ -50,6 +50,16 @@ const findUserById = async (id, options) => {
     }
 };
 
+const deleteUser = async (id) => {
+    try {
+        await User.findByIdAndDelete({
+            _id: id,
+            isAdmin: false,
+        });
+    } catch (error) {
+        throw error;
+    }
+};
 const handleUserAction = async (userId, action) => {
     try {
         if (!["banned", "unbanned"].includes(action)) {
@@ -86,4 +96,4 @@ const handleUserAction = async (userId, action) => {
     }
 };
 
-module.exports = { findUsers, findUserById, handleUserAction };
+module.exports = { findUsers, findUserById, deleteUser, handleUserAction };

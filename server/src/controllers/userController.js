@@ -10,6 +10,7 @@ const {
     handleUserAction,
     findUsers,
     findUserById,
+    deleteUser,
 } = require("../services/userService");
 const getUsers = async (req, res, next) => {
     try {
@@ -52,10 +53,7 @@ const getUserById = async (req, res, next) => {
 const deleteUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        await User.findByIdAndDelete({
-            _id: id,
-            isAdmin: false,
-        });
+        await deleteUser(id);
 
         return successResponse(res, {
             statusCode: 200,
