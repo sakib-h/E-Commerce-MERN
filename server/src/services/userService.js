@@ -49,6 +49,9 @@ const findUserById = async (id) => {
         if (!user) throw createError(404, "User not found");
         return user;
     } catch (error) {
+        if (error instanceof mongoose.Error.CastError) {
+            throw createError(400, "Invalid user id");
+        }
         throw error;
     }
 };
@@ -60,6 +63,9 @@ const deleteUser = async (id) => {
             isAdmin: false,
         });
     } catch (error) {
+        if (error instanceof mongoose.Error.CastError) {
+            throw createError(400, "Invalid user id");
+        }
         throw error;
     }
 };
@@ -107,6 +113,9 @@ const updateUser = async (req) => {
             throw createError(404, "User with this id does not exists");
         return updatedUser;
     } catch (error) {
+        if (error instanceof mongoose.Error.CastError) {
+            throw createError(400, "Invalid user id");
+        }
         throw error;
     }
 };
@@ -142,6 +151,9 @@ const handleUserAction = async (userId, action) => {
 
         return updatedUser;
     } catch (error) {
+        if (error instanceof mongoose.Error.CastError) {
+            throw createError(400, "Invalid user id");
+        }
         throw error;
     }
 };
