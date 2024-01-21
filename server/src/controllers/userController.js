@@ -11,8 +11,9 @@ const {
     findUsers,
     findUserById,
     deleteUser,
+    updateUser,
 } = require("../services/userService");
-const getUsers = async (req, res, next) => {
+const getAllUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
         const page = Number(req.query.page) || 1;
@@ -36,10 +37,7 @@ const getUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const options = {
-            password: 0,
-        };
-        const user = await findUserById(id, options);
+        const user = await findUserById(id);
         return successResponse(res, {
             statusCode: 200,
             message: "User Profile is Returned",
@@ -175,48 +173,7 @@ const activateUserAccount = async (req, res, next) => {
 
 const updateUserById = async (req, res, next) => {
     try {
-        const userId = req.params.id;
-        const options = { password: 0 };
-        const user = await findWithId(User, userId, options);
-
-        if (!user) throw createError(404, "User with this id does not exists");
-
-        const updateOptions = {
-            new: true,
-            runValidators: true,
-            context: "query",
-        };
-        let updates = {};
-
-        for (let key in req.body) {
-            if (["name", "password", "phone", "address"].includes(key)) {
-                updates[key] = req.body[key];
-            } else if (["email"].includes(key)) {
-                throw createError(400, "Email cannot be updated");
-            }
-        }
-
-        const image = req.file;
-        if (image) {
-            // Maximum image size 2 MB
-            if (image.size > 2097152) {
-                throw createError(
-                    400,
-                    "File too large! Image size must be less than 2MB"
-                );
-            }
-            updates.image = image.buffer.toString("base64");
-        }
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            updates,
-            updateOptions
-        ).select("-password");
-
-        if (!updatedUser)
-            throw createError(404, "User with this id does not exists");
-
+        const updatedUser = await updateUser(req);
         return successResponse(res, {
             statusCode: 200,
             message: "User updated successfully",
@@ -244,7 +201,7 @@ const manageUserBannedStatus = async (req, res, next) => {
 };
 
 module.exports = {
-    getUsers,
+    getAllUsers,
     getUserById,
     deleteUserById,
     processRegister,

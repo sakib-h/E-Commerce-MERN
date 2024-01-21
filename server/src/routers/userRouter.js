@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-    getUsers,
+    getAllUsers,
     getUserById,
     deleteUserById,
     processRegister,
@@ -14,7 +14,7 @@ const runValidation = require("../validators");
 const { isLoggedIn, isLoggedOut, isAdmin } = require("../middleware/auth");
 const userRouter = express.Router();
 
-userRouter.get("/", isLoggedIn, isAdmin, getUsers);
+userRouter.get("/", isLoggedIn, isAdmin, getAllUsers);
 userRouter.post(
     "/process-register",
     uploadUserImage.single("image"),
@@ -28,8 +28,8 @@ userRouter.get("/:id", isLoggedIn, getUserById);
 userRouter.delete("/:id", isLoggedIn, deleteUserById);
 userRouter.put(
     "/:id",
-    uploadUserImage.single("image"),
     isLoggedIn,
+    uploadUserImage.single("image"),
     updateUserById
 );
 userRouter.put("/manage-user/:id", isLoggedIn, isAdmin, manageUserBannedStatus);

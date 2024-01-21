@@ -40,8 +40,11 @@ const findUsers = async (search, limit, page) => {
     }
 };
 
-const findUserById = async (id, options) => {
+const findUserById = async (id) => {
     try {
+        const options = {
+            password: 0,
+        };
         const user = await User.findById(id, options);
         if (!user) throw createError(404, "User not found");
         return user;
@@ -56,6 +59,53 @@ const deleteUser = async (id) => {
             _id: id,
             isAdmin: false,
         });
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updateUser = async (req) => {
+    try {
+        const userId = req.params.id;
+        const user = await findUserById(userId);
+        if (!user) throw createError(404, "User with this id does not exists");
+
+        const updateOptions = {
+            new: true,
+            runValidators: true,
+            context: "query",
+        };
+        let updates = {};
+
+        for (let key in req.body) {
+            if (["name", "password", "phone", "address"].includes(key)) {
+                updates[key] = req.body[key];
+            } else if (["email"].includes(key)) {
+                throw createError(400, "Email cannot be updated");
+            }
+        }
+
+        const image = req.file;
+        if (image) {
+            // Maximum image size 2 MB
+            if (image.size > 2097152) {
+                throw createError(
+                    400,
+                    "File too large! Image size must be less than 2MB"
+                );
+            }
+            updates.image = image.buffer.toString("base64");
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            updates,
+            updateOptions
+        ).select("-password");
+
+        if (!updatedUser)
+            throw createError(404, "User with this id does not exists");
+        return updatedUser;
     } catch (error) {
         throw error;
     }
@@ -96,4 +146,10 @@ const handleUserAction = async (userId, action) => {
     }
 };
 
-module.exports = { findUsers, findUserById, deleteUser, handleUserAction };
+module.exports = {
+    findUsers,
+    findUserById,
+    deleteUser,
+    updateUser,
+    handleUserAction,
+};
