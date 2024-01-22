@@ -35,3 +35,4 @@
 31. GET/api/auth/refresh --> refresh the token
 32. PUT/api/users/banned-user --> Banned user
 33. PUT/api/users/unbanned-user --> Unbanned user
+34. PUT/api/users/update-password --> Update Password

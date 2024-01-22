@@ -1,4 +1,6 @@
 const createError = require("http-errors");
+const mongoose = require("mongoose");
+
 const User = require("../models/userModel");
 
 const findUsers = async (search, limit, page) => {
@@ -40,11 +42,8 @@ const findUsers = async (search, limit, page) => {
     }
 };
 
-const findUserById = async (id) => {
+const findUserById = async (id, options) => {
     try {
-        const options = {
-            password: 0,
-        };
         const user = await User.findById(id, options);
         if (!user) throw createError(404, "User not found");
         return user;
@@ -73,7 +72,10 @@ const deleteUser = async (id) => {
 const updateUser = async (req) => {
     try {
         const userId = req.params.id;
-        const user = await findUserById(userId);
+        const options = {
+            password: 0,
+        };
+        const user = await findUserById(userId, options);
         if (!user) throw createError(404, "User with this id does not exists");
 
         const updateOptions = {

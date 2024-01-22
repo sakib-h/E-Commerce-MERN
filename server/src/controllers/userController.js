@@ -1,8 +1,8 @@
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const { successResponse } = require("./responseController");
-const { findWithId } = require("../services/findItem");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const sendEmailWithNodemailer = require("../helper/email");
@@ -37,7 +37,10 @@ const getAllUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const user = await findUserById(id);
+        const options = {
+            password: 0,
+        };
+        const user = await findUserById(id, options);
         return successResponse(res, {
             statusCode: 200,
             message: "User Profile is Returned",
@@ -200,6 +203,29 @@ const manageUserBannedStatus = async (req, res, next) => {
     }
 };
 
+const updateUserPassword = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const { email, oldPassword, newPassword, confirmPassword } = req.body;
+        const user = await findUserById(userId);
+        
+
+        const isPasswordMatched = await bcrypt.compare(
+            oldPassword,
+            user.password
+        );
+        if (!isPasswordMatched)
+            throw createError(400, "Wrong password, Please try again");
+        if (newPassword !== confirmPassword)
+            throw createError(400, "Password does not match, Please try again");
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Password updated successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 module.exports = {
     getAllUsers,
     getUserById,
@@ -208,4 +234,5 @@ module.exports = {
     activateUserAccount,
     updateUserById,
     manageUserBannedStatus,
+    updateUserPassword,
 };

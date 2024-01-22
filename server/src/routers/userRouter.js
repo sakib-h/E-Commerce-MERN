@@ -7,6 +7,7 @@ const {
     activateUserAccount,
     updateUserById,
     manageUserBannedStatus,
+    updateUserPassword,
 } = require("../controllers/userController");
 const uploadUserImage = require("../middleware/fileUpload");
 const { validateUserRegistration } = require("../validators/auth");
@@ -33,5 +34,6 @@ userRouter.put(
     updateUserById
 );
 userRouter.put("/manage-user/:id", isLoggedIn, isAdmin, manageUserBannedStatus);
+userRouter.put("/update-password/:id", isLoggedIn, updateUserPassword);
 
 module.exports = userRouter;
