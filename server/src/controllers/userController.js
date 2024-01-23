@@ -208,7 +208,6 @@ const updateUserPassword = async (req, res, next) => {
         const userId = req.params.id;
         const { email, oldPassword, newPassword, confirmPassword } = req.body;
         const user = await findUserById(userId);
-        
 
         const isPasswordMatched = await bcrypt.compare(
             oldPassword,
@@ -218,9 +217,18 @@ const updateUserPassword = async (req, res, next) => {
             throw createError(400, "Wrong password, Please try again");
         if (newPassword !== confirmPassword)
             throw createError(400, "Password does not match, Please try again");
+        const filter = { userId };
+        const update = { $set: { password: newPassword } };
+        const options = { new: true };
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            update,
+            options
+        );
         return successResponse(res, {
             statusCode: 200,
             message: "Password updated successfully",
+            payload: updatedUser,
         });
     } catch (error) {
         next(error);
