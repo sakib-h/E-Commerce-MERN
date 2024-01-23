@@ -206,7 +206,7 @@ const manageUserBannedStatus = async (req, res, next) => {
 const updateUserPassword = async (req, res, next) => {
     try {
         const userId = req.params.id;
-        const { email, oldPassword, newPassword, confirmPassword } = req.body;
+        const { oldPassword, newPassword, confirmPassword } = req.body;
         const user = await findUserById(userId);
 
         const isPasswordMatched = await bcrypt.compare(
@@ -217,12 +217,12 @@ const updateUserPassword = async (req, res, next) => {
             throw createError(400, "Wrong password, Please try again");
         if (newPassword !== confirmPassword)
             throw createError(400, "Password does not match, Please try again");
-        const filter = { userId };
-        const update = { $set: { password: newPassword } };
-        const options = { new: true };
+
+        const updates = { password: newPassword };
+        const options = { new: true, password: 0 };
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            update,
+            updates,
             options
         );
         return successResponse(res, {
