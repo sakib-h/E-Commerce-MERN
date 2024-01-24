@@ -224,7 +224,12 @@ const updateUserPassword = async (req, res, next) => {
             userId,
             updates,
             options
-        );
+        ).select("-password");
+        if (!updatedUser)
+            throw createError(
+                400,
+                "Failed to update password, Please try again"
+            );
         return successResponse(res, {
             statusCode: 200,
             message: "Password updated successfully",
