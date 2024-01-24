@@ -1,6 +1,5 @@
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const { successResponse } = require("./responseController");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
@@ -12,6 +11,7 @@ const {
     findUserById,
     deleteUser,
     updateUser,
+    updatePassword,
 } = require("../services/userService");
 const getAllUsers = async (req, res, next) => {
     try {
@@ -207,29 +207,12 @@ const updateUserPassword = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const { oldPassword, newPassword, confirmPassword } = req.body;
-        const user = await findUserById(userId);
-
-        const isPasswordMatched = await bcrypt.compare(
-            oldPassword,
-            user.password
-        );
-        if (!isPasswordMatched)
-            throw createError(400, "Wrong password, Please try again");
-        if (newPassword !== confirmPassword)
-            throw createError(400, "Password does not match, Please try again");
-
-        const updates = { password: newPassword };
-        const options = { new: true, password: 0 };
-        const updatedUser = await User.findByIdAndUpdate(
+        const updatedUser = await updatePassword(
             userId,
-            updates,
-            options
-        ).select("-password");
-        if (!updatedUser)
-            throw createError(
-                400,
-                "Failed to update password, Please try again"
-            );
+            oldPassword,
+            newPassword,
+            confirmPassword
+        );
         return successResponse(res, {
             statusCode: 200,
             message: "Password updated successfully",

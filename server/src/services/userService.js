@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const User = require("../models/userModel");
 
@@ -121,6 +122,47 @@ const updateUser = async (req) => {
         throw error;
     }
 };
+
+const updatePassword = async (
+    userId,
+    oldPassword,
+    newPassword,
+    confirmPassword
+) => {
+    try {
+        const user = await findUserById(userId);
+        const isPasswordMatched = await bcrypt.compare(
+            oldPassword,
+            user.password
+        );
+        if (!isPasswordMatched)
+            throw createError(400, "Wrong password, Please try again");
+        if (oldPassword === newPassword) {
+            throw createError(
+                400,
+                "New password cannot be same as old password"
+            );
+        }
+        if (newPassword !== confirmPassword)
+            throw createError(400, "Password does not match, Please try again");
+
+        const updates = { password: newPassword };
+        const options = { new: true, password: 0 };
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            updates,
+            options
+        ).select("-password");
+        if (!updatedUser)
+            throw createError(
+                400,
+                "Failed to update password, Please try again"
+            );
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
 const handleUserAction = async (userId, action) => {
     try {
         if (!["banned", "unbanned"].includes(action)) {
@@ -165,5 +207,6 @@ module.exports = {
     findUserById,
     deleteUser,
     updateUser,
+    updatePassword,
     handleUserAction,
 };
