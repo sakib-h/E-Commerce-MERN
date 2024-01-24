@@ -10,7 +10,10 @@ const {
     updateUserPassword,
 } = require("../controllers/userController");
 const uploadUserImage = require("../middleware/fileUpload");
-const { validateUserRegistration } = require("../validators/auth");
+const {
+    validateUserRegistration,
+    validateUpdatePassword,
+} = require("../validators/auth");
 const runValidation = require("../validators");
 const { isLoggedIn, isLoggedOut, isAdmin } = require("../middleware/auth");
 const userRouter = express.Router();
@@ -34,6 +37,12 @@ userRouter.put(
     updateUserById
 );
 userRouter.put("/manage-user/:id", isLoggedIn, isAdmin, manageUserBannedStatus);
-userRouter.put("/update-password/:id", isLoggedIn, updateUserPassword);
+userRouter.put(
+    "/update-password/:id",
+    isLoggedIn,
+    validateUpdatePassword,
+    runValidation,
+    updateUserPassword
+);
 
 module.exports = userRouter;
