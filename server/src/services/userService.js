@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/userModel");
+const { createJSONWebToken } = require("../helper/jsonWebToken");
+const sendEmailWithNodemailer = require("../helper/email");
 
 const findUsers = async (search, limit, page) => {
     try {
@@ -163,6 +165,39 @@ const updatePassword = async (
         throw error;
     }
 };
+
+const resetPassword = async (email) => {
+    try {
+        const userData = await User.findOne({ email: email });
+        if (!userData) {
+            throw createError(404, "User not found");
+        }
+
+        // Create JWT token
+        const token = createJSONWebToken({ email }, jwtResetKey, "10m");
+
+        // Prepare email
+        const emailData = {
+            email,
+            subject: "Reset Password Link",
+            html: `
+            <h2>Hello ${userData.name},</h2>
+            <p>Please click here to <a href="${clientURL}/reset-password/${token}" target="_blank">Reset Password </a>  account. </p>
+        
+        `,
+        };
+
+        // Send email
+        try {
+            await sendEmailWithNodemailer(emailData);
+        } catch (error) {
+            next(createError(500, "Failed to send verification email"));
+            return;
+        }
+    } catch (error) {
+        throw error;
+    }
+};
 const handleUserAction = async (userId, action) => {
     try {
         if (!["banned", "unbanned"].includes(action)) {
@@ -208,5 +243,6 @@ module.exports = {
     deleteUser,
     updateUser,
     updatePassword,
+    resetPassword,
     handleUserAction,
 };

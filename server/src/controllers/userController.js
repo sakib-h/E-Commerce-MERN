@@ -12,6 +12,7 @@ const {
     deleteUser,
     updateUser,
     updatePassword,
+    resetPassword,
 } = require("../services/userService");
 const getAllUsers = async (req, res, next) => {
     try {
@@ -226,32 +227,7 @@ const updateUserPassword = async (req, res, next) => {
 const forgetPassword = async (req, res, next) => {
     try {
         const { email } = req.body;
-        const userData = await User.findOne({ email: email });
-        if (!userData) {
-            throw createError(404, "User not found");
-        }
-
-        // Create JWT token
-        const token = createJSONWebToken({ email }, jwtResetKey, "10m");
-
-        // Prepare email
-        const emailData = {
-            email,
-            subject: "Reset Password Link",
-            html: `
-                <h2>Hello ${userData.name},</h2>
-                <p>Please click here to <a href="${clientURL}/reset-password/${token}" target="_blank">Reset Password </a>  account. </p>
-            
-            `,
-        };
-
-        // Send email
-        try {
-            await sendEmailWithNodemailer(emailData);
-        } catch (error) {
-            next(createError(500, "Failed to send verification email"));
-            return;
-        }
+        resetPassword(email);
         return successResponse(res, {
             statusCode: 200,
             message: `Please check your ${email} to reset your password`,
