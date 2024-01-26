@@ -227,7 +227,8 @@ const updateUserPassword = async (req, res, next) => {
 const forgetPassword = async (req, res, next) => {
     try {
         const { email } = req.body;
-        resetPassword(email);
+        const token = await resetPassword(email);
+
         return successResponse(res, {
             statusCode: 200,
             message: `Please check your ${email} to reset your password`,
