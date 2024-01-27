@@ -100,9 +100,38 @@ const validateForgetPassword = [
         .isEmail()
         .withMessage("Invalid email address"),
 ];
+const validateResetPassword = [
+    body("newPassword")
+        .trim()
+        .notEmpty()
+        .withMessage("New Password is required. Please enter your password")
+        .isLength({ min: 6 })
+        .withMessage("Password should be at least 6 characters long")
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/
+        )
+        .withMessage(
+            "Password must contain at least one uppercase, one lowercase, one number and one special character"
+        ),
+    body("confirmPassword")
+        .trim()
+        .notEmpty()
+        .withMessage(
+            "Confirm Password is required. Please confirm your password"
+        )
+        .isLength({ min: 6 })
+        .withMessage("Password should be at least 6 characters long")
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/
+        )
+        .withMessage(
+            "Password must contain at least one uppercase, one lowercase, one number and one special character"
+        ),
+];
 module.exports = {
     validateUserRegistration,
     validateUserLogin,
     validateUpdatePassword,
     validateForgetPassword,
+    validateResetPassword,
 };
