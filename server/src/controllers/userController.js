@@ -244,7 +244,11 @@ const handleResetPassword = async (req, res, next) => {
     try {
         const token = req.params.token;
         const { newPassword, confirmPassword } = req.body;
-        const updatedUser = resetPassword(token, newPassword, confirmPassword);
+        const updatedUser = await resetPassword(
+            token,
+            newPassword,
+            confirmPassword
+        );
 
         return successResponse(res, {
             statusCode: 200,

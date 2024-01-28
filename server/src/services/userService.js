@@ -1,7 +1,7 @@
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const sendEmailWithNodemailer = require("../helper/email");
