@@ -7,7 +7,7 @@ const { createJSONWebToken } = require("../helper/jsonWebToken");
 const sendEmailWithNodemailer = require("../helper/email");
 const { jwtResetKey, clientURL } = require("../secret");
 
-const findUsers = async (search, limit, page) => {
+const getUsers = async (search, limit, page) => {
     try {
         const searchRegExp = new RegExp(".*" + search + ".*", "i");
         const filter = {
@@ -167,7 +167,7 @@ const updatePassword = async (
     }
 };
 
-const resetPassword = async (email) => {
+const forgetPassword = async (email) => {
     try {
         const userData = await User.findOne({ email: email });
         if (!userData) {
@@ -239,12 +239,47 @@ const handleUserAction = async (userId, action) => {
     }
 };
 
+const resetPassword = async (token, newPassword, confirmPassword) => {
+    try {
+        if (!token) throw createError(400, "Token not found");
+
+        const decoded = jwt.verify(token, jwtResetKey);
+        if (!decoded)
+            throw createError(
+                401,
+                "Failed to verify user, please try again letter"
+            );
+
+        if (newPassword !== confirmPassword) {
+            throw createError(400, "Password does not match, Please try again");
+        }
+        const updatedUser = await User.findOneAndUpdate(
+            { email: decoded.email },
+            { password: newPassword },
+            { new: true }
+        ).select("-password");
+        if (!updatedUser)
+            throw createError(
+                404,
+                "Failed to reset password. Please try again"
+            );
+        return updatedUser;
+    } catch (error) {
+        if (error.name === "TokenExpiredError") {
+            throw createError(401, "Token Expired, Please try again");
+        } else if (error.name === "JsonWebTokenError") {
+            throw createError(401, "Invalid Token, Please try again");
+        }
+    }
+};
+
 module.exports = {
-    findUsers,
+    getUsers,
     findUserById,
     deleteUser,
     updateUser,
     updatePassword,
+    forgetPassword,
     resetPassword,
     handleUserAction,
 };

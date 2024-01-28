@@ -1,15 +1,15 @@
 const express = require("express");
 const {
-    getAllUsers,
-    getUserById,
-    deleteUserById,
-    processRegister,
-    activateUserAccount,
-    updateUserById,
-    manageUserBannedStatus,
-    updateUserPassword,
-    forgetPassword,
-    resetUserPassword,
+    handleGetAllUsers,
+    handleGetUserById,
+    handleDeleteUserById,
+    handleProcessRegister,
+    handleActivateUserAccount,
+    handleUpdateUserById,
+    handleManageUserBannedStatus,
+    handleUpdateUserPassword,
+    handleForgetPassword,
+    handleResetPassword,
 } = require("../controllers/userController");
 const uploadUserImage = require("../middleware/fileUpload");
 const {
@@ -22,43 +22,48 @@ const runValidation = require("../validators");
 const { isLoggedIn, isLoggedOut, isAdmin } = require("../middleware/auth");
 const userRouter = express.Router();
 
-userRouter.get("/", isLoggedIn, isAdmin, getAllUsers);
+userRouter.get("/", isLoggedIn, isAdmin, handleGetAllUsers);
 userRouter.post(
     "/process-register",
     uploadUserImage.single("image"),
     isLoggedOut,
     validateUserRegistration,
     runValidation,
-    processRegister
+    handleProcessRegister
 );
-userRouter.post("/activate", isLoggedOut, activateUserAccount);
-userRouter.get("/:id", isLoggedIn, getUserById);
-userRouter.delete("/:id", isLoggedIn, deleteUserById);
+userRouter.post("/activate", isLoggedOut, handleActivateUserAccount);
+userRouter.get("/:id", isLoggedIn, handleGetUserById);
+userRouter.delete("/:id", isLoggedIn, handleDeleteUserById);
 userRouter.put(
     "/update-user/:id",
     isLoggedIn,
     uploadUserImage.single("image"),
-    updateUserById
+    handleUpdateUserById
 );
-userRouter.put("/manage-user/:id", isLoggedIn, isAdmin, manageUserBannedStatus);
+userRouter.put(
+    "/manage-user/:id",
+    isLoggedIn,
+    isAdmin,
+    handleManageUserBannedStatus
+);
 userRouter.put(
     "/update-password/:id",
     isLoggedIn,
     validateUpdatePassword,
     runValidation,
-    updateUserPassword
+    handleUpdateUserPassword
 );
 userRouter.post(
     "/forget-password",
     validateForgetPassword,
     runValidation,
-    forgetPassword
+    handleForgetPassword
 );
 userRouter.put(
     "/reset-password/:token",
     validateResetPassword,
     runValidation,
-    resetUserPassword
+    handleResetPassword
 );
 
 module.exports = userRouter;

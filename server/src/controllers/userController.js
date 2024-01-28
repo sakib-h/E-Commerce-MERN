@@ -7,20 +7,21 @@ const { jwtActivationKey, clientURL, jwtResetKey } = require("../secret");
 const sendEmailWithNodemailer = require("../helper/email");
 const {
     handleUserAction,
-    findUsers,
+    getUsers,
     findUserById,
     deleteUser,
     updateUser,
     updatePassword,
+    forgetPassword,
     resetPassword,
 } = require("../services/userService");
-const getAllUsers = async (req, res, next) => {
+const handleGetAllUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
 
-        const { users, pagination } = await findUsers(search, limit, page);
+        const { users, pagination } = await getUsers(search, limit, page);
 
         return successResponse(res, {
             statusCode: 200,
@@ -35,7 +36,7 @@ const getAllUsers = async (req, res, next) => {
     }
 };
 
-const getUserById = async (req, res, next) => {
+const handleGetUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
         const options = {
@@ -52,7 +53,7 @@ const getUserById = async (req, res, next) => {
     }
 };
 
-const deleteUserById = async (req, res, next) => {
+const handleDeleteUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
         await deleteUser(id);
@@ -66,7 +67,7 @@ const deleteUserById = async (req, res, next) => {
     }
 };
 
-const processRegister = async (req, res, next) => {
+const handleProcessRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
 
@@ -136,7 +137,7 @@ const processRegister = async (req, res, next) => {
     }
 };
 
-const activateUserAccount = async (req, res, next) => {
+const handleActivateUserAccount = async (req, res, next) => {
     try {
         const token = req.body.token;
         if (!token) throw createError(400, "Token not found");
@@ -175,7 +176,7 @@ const activateUserAccount = async (req, res, next) => {
     }
 };
 
-const updateUserById = async (req, res, next) => {
+const handleUpdateUserById = async (req, res, next) => {
     try {
         const updatedUser = await updateUser(req);
         return successResponse(res, {
@@ -188,7 +189,7 @@ const updateUserById = async (req, res, next) => {
     }
 };
 
-const manageUserBannedStatus = async (req, res, next) => {
+const handleManageUserBannedStatus = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const action = req.body.action;
@@ -204,7 +205,7 @@ const manageUserBannedStatus = async (req, res, next) => {
     }
 };
 
-const updateUserPassword = async (req, res, next) => {
+const handleUpdateUserPassword = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const { oldPassword, newPassword, confirmPassword } = req.body;
@@ -224,10 +225,10 @@ const updateUserPassword = async (req, res, next) => {
     }
 };
 
-const forgetPassword = async (req, res, next) => {
+const handleForgetPassword = async (req, res, next) => {
     try {
         const { email } = req.body;
-        const token = await resetPassword(email);
+        const token = await forgetPassword(email);
 
         return successResponse(res, {
             statusCode: 200,
@@ -239,62 +240,30 @@ const forgetPassword = async (req, res, next) => {
     }
 };
 
-const resetUserPassword = async (req, res, next) => {
+const handleResetPassword = async (req, res, next) => {
     try {
         const token = req.params.token;
         const { newPassword, confirmPassword } = req.body;
-        try {
-            if (!token) throw createError(400, "Token not found");
+        const updatedUser = resetPassword(token, newPassword, confirmPassword);
 
-            const decoded = jwt.verify(token, jwtResetKey);
-            if (!decoded)
-                throw createError(
-                    401,
-                    "Failed to verify user, please try again letter"
-                );
-
-            if (newPassword !== confirmPassword) {
-                throw createError(
-                    400,
-                    "Password does not match, Please try again"
-                );
-            }
-            const updatedUser = await User.findOneAndUpdate(
-                { email: decoded.email },
-                { password: newPassword },
-                { new: true }
-            ).select("-password");
-            if (!updatedUser)
-                throw createError(
-                    404,
-                    "Failed to reset password. Please try again"
-                );
-
-            return successResponse(res, {
-                statusCode: 200,
-                message: "Password reset successfully",
-                payload: updatedUser,
-            });
-        } catch (error) {
-            if (error.name === "TokenExpiredError") {
-                throw createError(401, "Token Expired, Please try again");
-            } else if (error.name === "JsonWebTokenError") {
-                throw createError(401, "Invalid Token, Please try again");
-            }
-        }
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Password reset successfully",
+            payload: updatedUser,
+        });
     } catch (error) {
         next(error);
     }
 };
 module.exports = {
-    getAllUsers,
-    getUserById,
-    deleteUserById,
-    processRegister,
-    activateUserAccount,
-    updateUserById,
-    manageUserBannedStatus,
-    updateUserPassword,
-    forgetPassword,
-    resetUserPassword,
+    handleGetAllUsers,
+    handleGetUserById,
+    handleDeleteUserById,
+    handleProcessRegister,
+    handleActivateUserAccount,
+    handleUpdateUserById,
+    handleManageUserBannedStatus,
+    handleUpdateUserPassword,
+    handleForgetPassword,
+    handleResetPassword,
 };
