@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const createError = require("http-errors");
 const { successResponse } = require("./responseController");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
-const { jwtAccessKey } = require("../secret");
+const { jwtAccessKey, jwtRefreshKey } = require("../secret");
 
 const handleLogin = async (req, res, next) => {
     try {
@@ -27,7 +27,7 @@ const handleLogin = async (req, res, next) => {
             throw createError(401, "You are banned. Please contact admin.");
         }
 
-        // token cookie
+        // Access token
         const accessToken = createJSONWebToken({ user }, jwtAccessKey, "15m");
 
         // Send the response
@@ -36,6 +36,16 @@ const handleLogin = async (req, res, next) => {
             secure: true,
             sameSite: "none",
             maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+
+        // Refresh token
+        const refreshToken = createJSONWebToken({ user }, jwtRefreshKey, "7d");
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
         // Send the response
@@ -53,7 +63,7 @@ const handleLogin = async (req, res, next) => {
 
 const handleLogout = async (req, res, next) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("accessToken");
         successResponse(res, {
             statusCode: 200,
             message: "User Logged out successfully",
