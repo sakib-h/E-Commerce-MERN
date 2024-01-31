@@ -95,6 +95,10 @@ const handleRefreshToken = async (req, res, next) => {
 
 const handleProtectedRoute = async (req, res, next) => {
     try {
+        const accessToken = req.cookies.accessToken;
+        if (!accessToken) {
+            throw createError(401, "Please login to continue.");
+        }
         return successResponse(res, {
             statusCode: 200,
             message: "You are authorized to access this route.",
