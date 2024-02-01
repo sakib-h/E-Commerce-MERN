@@ -93,7 +93,17 @@ const handleRefreshToken = async (req, res, next) => {
     }
 };
 
-const handleProtectedRoute = async (req, res, next) => {};
+const handleProtectedRoute = async (req, res, next) => {
+    try {
+        return successResponse(res, {
+            statusCode: 200,
+            message: "You are authorized to access this route.",
+            payload: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 const handleLogout = async (req, res, next) => {
     try {
