@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const { successResponse } = require("./responseController");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
@@ -61,6 +62,39 @@ const handleLogin = async (req, res, next) => {
     }
 };
 
+const handleRefreshToken = async (req, res, next) => {
+    try {
+        const oldRefreshToken = req.cookies.refreshToken;
+        if (!oldRefreshToken) {
+            throw createError(401, "Please login to continue.");
+        }
+        const { user } = jwt.verify(oldRefreshToken, jwtRefreshKey);
+
+        if (!user) {
+            throw createError(401, "Please login to continue.");
+        }
+        const accessToken = createJSONWebToken({ user }, jwtAccessKey, "15m");
+
+        // Send the response
+        res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: "New access token generated successfully",
+            payload: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const handleProtectedRoute = async (req, res, next) => {};
+
 const handleLogout = async (req, res, next) => {
     try {
         res.clearCookie("accessToken");
@@ -73,4 +107,9 @@ const handleLogout = async (req, res, next) => {
         next(error);
     }
 };
-module.exports = { handleLogin, handleLogout };
+module.exports = {
+    handleLogin,
+    handleRefreshToken,
+    handleProtectedRoute,
+    handleLogout,
+};

@@ -128,6 +128,7 @@ const validateResetPassword = [
             "Password must contain at least one uppercase, one lowercase, one number and one special character"
         ),
 ];
+
 module.exports = {
     validateUserRegistration,
     validateUserLogin,
