@@ -99,6 +99,10 @@ const handleProtectedRoute = async (req, res, next) => {
         if (!accessToken) {
             throw createError(401, "Please login to continue.");
         }
+        const { user } = jwt.verify(accessToken, jwtAccessKey);
+        if (!user) {
+            throw createError(401, "Please login to continue.");
+        }
         return successResponse(res, {
             statusCode: 200,
             message: "You are authorized to access this route.",
@@ -112,6 +116,7 @@ const handleProtectedRoute = async (req, res, next) => {
 const handleLogout = async (req, res, next) => {
     try {
         res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
         successResponse(res, {
             statusCode: 200,
             message: "User Logged out successfully",
