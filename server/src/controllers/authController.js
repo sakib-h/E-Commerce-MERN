@@ -50,7 +50,8 @@ const handleLogin = async (req, res, next) => {
         });
 
         // Send the response
-        const responseData = await User.findOne({ email }).select("-password");
+        const responseData = user.toObject();
+        delete responseData.password;
 
         return successResponse(res, {
             statusCode: 200,

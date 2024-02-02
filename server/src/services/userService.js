@@ -89,10 +89,12 @@ const updateUser = async (req) => {
         };
         let updates = {};
 
-        for (let key in req.body) {
-            if (["name", "password", "phone", "address"].includes(key)) {
+        const updateItems = ["name", "password", "phone", "address"];
+
+        for (const key in req.body) {
+            if (updateItems.includes(key)) {
                 updates[key] = req.body[key];
-            } else if (["email"].includes(key)) {
+            } else if (key === "email") {
                 throw createError(400, "Email cannot be updated");
             }
         }

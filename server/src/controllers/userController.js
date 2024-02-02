@@ -128,9 +128,6 @@ const handleProcessRegister = async (req, res, next) => {
         return successResponse(res, {
             statusCode: 200,
             message: `Please check your ${email} to activate your account`,
-            payload: {
-                token,
-            },
         });
     } catch (error) {
         next(error);
