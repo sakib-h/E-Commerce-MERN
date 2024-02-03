@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
-const sendEmailWithNodemailer = require("../helper/email");
 const { jwtResetKey, clientURL } = require("../secret");
+const sendEmail = require("../helper/sendEmail");
 
 const getUsers = async (search, limit, page) => {
     try {
@@ -191,13 +191,7 @@ const forgetPassword = async (email) => {
         };
 
         // Send email
-        try {
-            await sendEmailWithNodemailer(emailData);
-            return token;
-        } catch (error) {
-            next(createError(500, "Failed to send verification email"));
-            return;
-        }
+        await sendEmail(emailData);
     } catch (error) {
         throw error;
     }

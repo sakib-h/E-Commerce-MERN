@@ -15,6 +15,8 @@ const {
     forgetPassword,
     resetPassword,
 } = require("../services/userService");
+const checkUserExists = require("../helper/checkUserExists");
+const sendEmail = require("../helper/sendEmail");
 const handleGetAllUsers = async (req, res, next) => {
     try {
         const search = req.query.search || "";
@@ -71,7 +73,7 @@ const handleProcessRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
 
-        const userExists = await User.exists({ email: email });
+        const userExists = await checkUserExists(email);
         if (userExists) {
             throw createError(
                 409,
@@ -118,12 +120,7 @@ const handleProcessRegister = async (req, res, next) => {
         };
 
         // Send Email
-        try {
-            await sendEmailWithNodemailer(emailData);
-        } catch (error) {
-            next(createError(500, "Failed to send verification email"));
-            return;
-        }
+        await sendEmail(emailData);
 
         return successResponse(res, {
             statusCode: 200,
