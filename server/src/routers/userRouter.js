@@ -32,22 +32,22 @@ userRouter.post(
     handleProcessRegister
 );
 userRouter.post("/activate", isLoggedOut, handleActivateUserAccount);
-userRouter.get("/:id", isLoggedIn, handleGetUserById);
-userRouter.delete("/:id", isLoggedIn, handleDeleteUserById);
+userRouter.get("/:id([0-9a-fA-f]{24})", isLoggedIn, handleGetUserById);
+userRouter.delete("/:id([0-9a-fA-f]{24})", isLoggedIn, handleDeleteUserById);
 userRouter.put(
-    "/update-user/:id",
+    "/update-user/:id([0-9a-fA-f]{24})",
     isLoggedIn,
     uploadUserImage.single("image"),
     handleUpdateUserById
 );
 userRouter.put(
-    "/manage-user/:id",
+    "/manage-user/:id([0-9a-fA-f]{24})",
     isLoggedIn,
     isAdmin,
     handleManageUserBannedStatus
 );
 userRouter.put(
-    "/update-password/:id",
+    "/update-password/:id([0-9a-fA-f]{24})",
     isLoggedIn,
     validateUpdatePassword,
     runValidation,
