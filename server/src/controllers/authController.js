@@ -5,6 +5,10 @@ const createError = require("http-errors");
 const { successResponse } = require("./responseController");
 const { createJSONWebToken } = require("../helper/jsonWebToken");
 const { jwtAccessKey, jwtRefreshKey } = require("../secret");
+const {
+    setAccessTokenCookie,
+    setRefreshTokenCookie,
+} = require("../helper/setCookies");
 
 const handleLogin = async (req, res, next) => {
     try {
@@ -31,23 +35,14 @@ const handleLogin = async (req, res, next) => {
         // Access token
         const accessToken = createJSONWebToken({ user }, jwtAccessKey, "15m");
 
-        // Send the response
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 15 * 60 * 1000, // 15 minutes
-        });
+        // set the access token in the cookie
+        setAccessTokenCookie(res, accessToken);
 
         // Refresh token
         const refreshToken = createJSONWebToken({ user }, jwtRefreshKey, "7d");
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
+        // set the refresh token in the cookie
+        setRefreshTokenCookie(res, refreshToken);
 
         // Send the response
         const responseData = user.toObject();
