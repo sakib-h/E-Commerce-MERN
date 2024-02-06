@@ -33,6 +33,8 @@
 29. POST/api/auth/logout --> User Logout.
 30. Middlewares --> isLoggedIn, isLoggedOut, isAdmin
 31. GET/api/auth/refresh --> refresh the token
-32. PUT/api/users/banned-user --> Banned user
-33. PUT/api/users/unbanned-user --> Unbanned user
-34. PUT/api/users/update-password --> Update Password
+32. GET/api/auth/protected --> verify the token and give access to other routes
+33. PUT/api/users/banned-user --> Banned user
+34. PUT/api/users/unbanned-user --> Unbanned user
+35. PUT/api/users/update-password --> Update Password
+36. Winston logger library

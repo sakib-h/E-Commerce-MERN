@@ -71,13 +71,8 @@ const handleRefreshToken = async (req, res, next) => {
         }
         const accessToken = createJSONWebToken({ user }, jwtAccessKey, "15m");
 
-        // Send the response
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 15 * 60 * 1000, // 15 minutes
-        });
+        // Set the access token in the cookie
+        setAccessTokenCookie(res, accessToken);
 
         return successResponse(res, {
             statusCode: 200,
