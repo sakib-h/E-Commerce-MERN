@@ -1,4 +1,5 @@
 var jwt = require("jsonwebtoken");
+const logger = require("../controllers/loggerController");
 
 const createJSONWebToken = (payload, secretKey, expiresIn) => {
     if (typeof payload !== "object" || !payload) {
@@ -11,7 +12,7 @@ const createJSONWebToken = (payload, secretKey, expiresIn) => {
         const token = jwt.sign(payload, secretKey, { expiresIn });
         return token;
     } catch (error) {
-        console.error("Failed to create JSON web toke", error);
+        logger.log("error", "Failed to create JSON web toke", error);
         throw error;
     }
 };

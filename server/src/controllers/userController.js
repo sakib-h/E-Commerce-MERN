@@ -188,7 +188,6 @@ const handleManageUserBannedStatus = async (req, res, next) => {
         const userId = req.params.id;
         const action = req.body.action;
         const updatedUser = await handleUserAction(userId, action);
-        console.log(updatedUser);
         return successResponse(res, {
             statusCode: 200,
             message: `User ${action} successfully`,
