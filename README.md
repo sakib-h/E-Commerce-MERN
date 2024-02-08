@@ -40,6 +40,8 @@
 36. Winston logger library
 37. Category Model and Input Validation
 38. Category CRUD - Create Category - POST: api/categories
-39. Category CRUD - Read Category
-40. Category CRUD - Update Category
-41. Category CRUD - Delete Category
+39. Category CRUD - Read Category -
+    GET: api/categories
+    GEt: api/categories/:slug
+40. Category CRUD - Update Category - PUT: api/categories/:slug
+41. Category CRUD - Delete Category - DELETE: api/categories/:slug
