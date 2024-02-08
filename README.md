@@ -38,3 +38,8 @@
 34. PUT/api/users/unbanned-user --> Unbanned user
 35. PUT/api/users/update-password --> Update Password
 36. Winston logger library
+37. Category Model and Input Validation
+38. Category CRUD - Create Category
+39. Category CRUD - Read Category
+40. Category CRUD - Update Category
+41. Category CRUD - Delete Category
