@@ -3,6 +3,7 @@ const {
     handleCreateCategory,
     handleGetCategories,
     handleGetCategory,
+    handleUpdateCategory,
 } = require("../controllers/categoryController");
 const { validateCategory } = require("../validators/category");
 const runValidation = require("../validators");
@@ -19,10 +20,15 @@ categoryRouter.post(
     runValidation,
     handleCreateCategory
 );
-
-// GET /api/categories
 categoryRouter.get("/", handleGetCategories);
-
-// GET /api/categories/:slug
 categoryRouter.get("/:slug", handleGetCategory);
+categoryRouter.put(
+    "/:slug",
+    isLoggedIn,
+    isAdmin,
+    validateCategory,
+    runValidation,
+    handleUpdateCategory
+);
+
 module.exports = categoryRouter;

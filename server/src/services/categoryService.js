@@ -21,4 +21,16 @@ const getCategory = async (slug) => {
     return category;
 };
 
-module.exports = { createCategory, getCategories, getCategory };
+const updateCategory = async (slug, name) => {
+    const filter = { slug };
+    const updates = { name: name, slug: slugify(name).toLowerCase() };
+    const options = { new: true };
+    const updatedCategory = await Category.findOneAndUpdate(
+        filter, // find category by slug
+        updates, // update name and slug
+        options // return updated category
+    );
+    return updatedCategory;
+};
+
+module.exports = { createCategory, getCategories, getCategory, updateCategory };

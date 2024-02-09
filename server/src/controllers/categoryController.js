@@ -5,6 +5,7 @@ const {
     createCategory,
     getCategories,
     getCategory,
+    updateCategory,
 } = require("../services/categoryService");
 
 const handleCreateCategory = async (req, res, next) => {
@@ -54,8 +55,28 @@ const handleGetCategory = async (req, res, next) => {
     }
 };
 
+const handleUpdateCategory = async (req, res, next) => {
+    try {
+        const updatedCategory = await updateCategory(
+            req.params.slug,
+            req.body.name
+        );
+        if (!updatedCategory) {
+            return next(createError(404, "Failed to update category"));
+        }
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Category updated successfully",
+            payload: updatedCategory,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     handleCreateCategory,
     handleGetCategories,
     handleGetCategory,
+    handleUpdateCategory,
 };
