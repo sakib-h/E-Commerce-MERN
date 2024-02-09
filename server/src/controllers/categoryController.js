@@ -4,6 +4,7 @@ const { successResponse } = require("./responseController");
 const {
     createCategory,
     getCategories,
+    getCategory,
 } = require("../services/categoryService");
 
 const handleCreateCategory = async (req, res, next) => {
@@ -37,4 +38,24 @@ const handleGetCategories = async (req, res, next) => {
     }
 };
 
-module.exports = { handleCreateCategory, handleGetCategories };
+const handleGetCategory = async (req, res, next) => {
+    try {
+        const category = await getCategory(req.params.slug);
+        if (!category) {
+            return next(createError(404, "Category not found"));
+        }
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Category retrieved successfully",
+            payload: category,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = {
+    handleCreateCategory,
+    handleGetCategories,
+    handleGetCategory,
+};

@@ -2,6 +2,7 @@ const express = require("express");
 const {
     handleCreateCategory,
     handleGetCategories,
+    handleGetCategory,
 } = require("../controllers/categoryController");
 const { validateCategory } = require("../validators/category");
 const runValidation = require("../validators");
@@ -23,5 +24,5 @@ categoryRouter.post(
 categoryRouter.get("/", handleGetCategories);
 
 // GET /api/categories/:slug
-
+categoryRouter.get("/:slug", handleGetCategory);
 module.exports = categoryRouter;
