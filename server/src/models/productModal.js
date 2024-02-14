@@ -74,6 +74,12 @@ const productSchema = new Schema(
             contentType: String,
             required: [true, "Product image is required"],
         },
+
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: "Category",
+            required: [true, "Product category is required"],
+        },
     },
     {
         timestamps: true,
