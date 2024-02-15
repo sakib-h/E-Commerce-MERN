@@ -37,6 +37,20 @@ const data = {
             isAdmin: false,
         },
     ],
+    products: [
+        {
+            name: "iPhone 14 Pro Max",
+            slug: "iphone-14-pro-max",
+            description:
+                "The iPhone 14 Pro Max is the most advanced iPhone ever. It features the largest display ever on an iPhone, a new A16 Bionic chip, and Pro camera system with 10-bit Dolby Vision HDR recording.",
+            price: 1999.99,
+            quantity: 100,
+            sold: 0,
+            shipping: 100,
+            image: "public/images/products/iphone-14-pro-max.jpg",
+            category: "Electronics",
+        },
+    ],
 };
 
 module.exports = data;
