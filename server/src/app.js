@@ -10,6 +10,7 @@ const seedRouter = require("./routers/seedRouter");
 const { errorResponse } = require("./controllers/responseController");
 const authRouter = require("./routers/authRouter");
 const categoryRouter = require("./routers/categoryRouter");
+const productRouter = require("./routers/productRouter");
 const app = express();
 
 // rate limiter
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/products", productRouter);
 app.use("/api/seed", seedRouter);
 
 //  client error handling
