@@ -6,7 +6,9 @@ const handleCreateProduct = async (req, res, next) => {
     try {
         const { name, description, price, quantity, shipping, category } =
             req.body;
+
         const image = req.file;
+
         if (!image) {
             throw createError(400, "Image is required");
         }
@@ -33,10 +35,17 @@ const handleCreateProduct = async (req, res, next) => {
             category: category,
         });
 
+        if (!product) {
+            throw createError(
+                500,
+                "Product creation failed. Please try again."
+            );
+        }
+
         return successResponse(res, {
             statusCode: 201,
             message: "Product created successfully",
-            payload: req.body,
+            payload: { product },
         });
     } catch (error) {
         next(error);
