@@ -7,7 +7,12 @@ const handleCreateProduct = async (req, res, next) => {
             req.body;
 
         const image = req.file;
-        
+        if (!image) {
+            throw createError(400, "Product image is required");
+        }
+        if (image.size > 1024 * 1024 * 2) {
+            throw createError(400, "Product image should be less than 2 MB");
+        }
 
         return successResponse(res, {
             statusCode: 200,
