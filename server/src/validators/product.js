@@ -7,13 +7,23 @@ const validateProduct = [
         .withMessage("Product name is required.")
         .isLength({ min: 3, max: 150 })
         .withMessage(
-            "Product name must contain minimum 3 & maximum 150 characters long"
+            "Product name must contain between 3 to 150 characters long"
         ),
 
     body("description")
         .trim()
         .notEmpty()
-        .withMessage("Description is required."),
+        .withMessage("Description is required.")
+        .isLength({ min: 20, max: 2000 })
+        .withMessage(
+            "Product description must contain between 20 to 2000 characters long"
+        ),
+    body("price")
+        .trim()
+        .notEmpty()
+        .withMessage("Price is required.")
+        .isFloat({ min: 0 })
+        .withMessage("Price must be a positive number"),
 ];
 
 module.exports = { validateProduct };
