@@ -18,12 +18,22 @@ const validateProduct = [
         .withMessage(
             "Product description must contain between 20 to 2000 characters long"
         ),
+
     body("price")
         .trim()
         .notEmpty()
         .withMessage("Price is required.")
         .isFloat({ min: 0 })
         .withMessage("Price must be a positive number"),
+
+    body("quantity")
+        .trim()
+        .notEmpty()
+        .withMessage("Quantity is required.")
+        .isInt({ min: 0 })
+        .withMessage("Quantity must be a positive number"),
+
+    body("category").trim().notEmpty().withMessage("Category is required"),
 ];
 
 module.exports = { validateProduct };
