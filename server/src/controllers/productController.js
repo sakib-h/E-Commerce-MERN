@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const slugify = require("slugify");
 const { successResponse } = require("./responseController");
 const Product = require("../models/productModal");
 
@@ -9,7 +10,7 @@ const handleCreateProduct = async (req, res, next) => {
 
         const existedProduct = await Product.exists({ name: name });
         if (existedProduct) {
-            throw createError(400, "Product name already exists");
+            throw createError(409, "Product with this name already exists");
         }
 
         const image = req.file;
@@ -22,9 +23,21 @@ const handleCreateProduct = async (req, res, next) => {
 
         const imageBufferString = image.buffer.toString("base64");
 
+        const product = await Product.create({
+            name,
+            slug: slugify(name),
+            description,
+            price,
+            quantity,
+            shipping,
+            image: imageBufferString,
+            category,
+        });
+
         return successResponse(res, {
             statusCode: 200,
             message: "Product created successfully",
+            payload: { product },
         });
     } catch (error) {
         next(error);

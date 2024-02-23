@@ -6,7 +6,7 @@ const {
     handleRefreshToken,
     handleProtectedRoute,
 } = require("../controllers/authController");
-const { isLoggedOut, isLoggedIn } = require("../middleware/auth");
+const { isLoggedOut, isLoggedIn } = require("../middlewares/auth");
 const { validateUserLogin } = require("../validators/auth");
 const authRouter = express.Router();
 

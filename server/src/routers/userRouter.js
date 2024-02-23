@@ -11,7 +11,7 @@ const {
     handleForgetPassword,
     handleResetPassword,
 } = require("../controllers/userController");
-const uploadUserImage = require("../middleware/fileUpload");
+const uploadUserImage = require("../middlewares/fileUpload");
 const {
     validateUserRegistration,
     validateUpdatePassword,
@@ -19,7 +19,7 @@ const {
     validateResetPassword,
 } = require("../validators/auth");
 const runValidation = require("../validators");
-const { isLoggedIn, isLoggedOut, isAdmin } = require("../middleware/auth");
+const { isLoggedIn, isLoggedOut, isAdmin } = require("../middlewares/auth");
 const userRouter = express.Router();
 
 userRouter.get("/", isLoggedIn, isAdmin, handleGetAllUsers);
