@@ -33,6 +33,8 @@ const validateProduct = [
         .isInt({ min: 0 })
         .withMessage("Quantity must be a positive number"),
 
+    body("image").optional().isString(),
+
     body("category").trim().notEmpty().withMessage("Category is required"),
 ];
 
