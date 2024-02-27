@@ -20,16 +20,21 @@ const createProduct = async (req) => {
 
     const imageBufferString = image.buffer.toString("base64");
 
-    const product = await Product.create({
+    const productInfo = {
         name,
         slug: slugify(name),
         description,
         price,
         quantity,
         shipping,
-        image: imageBufferString,
         category,
-    });
+    };
+
+    if (image) {
+        productInfo.image = imageBufferString;
+    }
+
+    const product = await Product.create(productInfo);
 
     return product;
 };
