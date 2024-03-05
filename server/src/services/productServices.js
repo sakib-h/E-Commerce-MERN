@@ -39,4 +39,18 @@ const createProduct = async (req) => {
     return product;
 };
 
-module.exports = { createProduct };
+const getAllProducts = async (page = 1, limit = 5) => {
+    const products = await Product.find({})
+        .populate("category") // Get all information about category
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+
+    if (!products) throw createError(404, "No products found");
+
+    const count = await Product.find({}).countDocuments();
+
+    return { products, count };
+};
+
+module.exports = { createProduct, getAllProducts };

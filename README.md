@@ -47,7 +47,7 @@
 41. Category CRUD - Delete Category - DELETE: api/categories/:slug
 42. Product API - Product Model
 43. Product API - Create seed route for testing products
-44. Product API - Create Product
-45. Product API - Read Product
+44. Product API - Create Product POST: /api/products
+45. Product API - Read Product GET: /api/products, GET: /api/products/:slug
 46. Product API - Update Product
 47. Product API - Delete Product
