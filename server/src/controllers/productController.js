@@ -21,9 +21,16 @@ const handleCreateProduct = async (req, res, next) => {
 
 const handleGetAllProducts = async (req, res, next) => {
     try {
-        const page = parseInt(req.query.page);
-        const limit = parseInt(req.query.limit);
-        const { products, count } = await getAllProducts(page, limit);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const {
+            products,
+            count,
+            totalPages,
+            currentPage,
+            previousPage,
+            nextPage,
+        } = await getAllProducts(page, limit);
         return successResponse(res, {
             statusCode: 200,
             message: "All products fetched successfully",
@@ -31,10 +38,10 @@ const handleGetAllProducts = async (req, res, next) => {
                 products: products,
                 pagination: {
                     totalNumberOfProducts: count,
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: page,
-                    previousPage: page > 1 ? page - 1 : null,
-                    nextPage: page < Math.ceil(count / limit) ? page + 1 : null,
+                    totalPages: totalPages,
+                    currentPage: currentPage,
+                    previousPage: previousPage,
+                    nextPage: nextPage,
                 },
             },
         });

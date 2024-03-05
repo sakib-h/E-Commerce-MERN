@@ -39,7 +39,7 @@ const createProduct = async (req) => {
     return product;
 };
 
-const getAllProducts = async (page = 1, limit = 5) => {
+const getAllProducts = async (page, limit) => {
     const products = await Product.find({})
         .populate("category") // Get all information about category
         .skip((page - 1) * limit)
@@ -50,7 +50,14 @@ const getAllProducts = async (page = 1, limit = 5) => {
 
     const count = await Product.find({}).countDocuments();
 
-    return { products, count };
+    return {
+        products,
+        count,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+        previousPage: page > 1 ? page - 1 : null,
+        nextPage: page < Math.ceil(count / limit) ? page + 1 : null,
+    };
 };
 
 module.exports = { createProduct, getAllProducts };
