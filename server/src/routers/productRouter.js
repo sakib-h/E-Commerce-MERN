@@ -2,6 +2,7 @@ const express = require("express");
 const {
     handleCreateProduct,
     handleGetAllProducts,
+    handleGetProduct,
 } = require("../controllers/productController");
 const upload = require("../middlewares/fileUpload");
 const { validateProduct } = require("../validators/product");
@@ -23,5 +24,8 @@ productRouter.post(
 
 // POST: /api/products --> GEt ALL PRODUCTS
 productRouter.get("/", handleGetAllProducts);
+
+// POST: /api/products/:slug --> GEt PRODUCT
+productRouter.get("/:slug", handleGetProduct);
 
 module.exports = productRouter;

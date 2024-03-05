@@ -1,9 +1,8 @@
-const createError = require("http-errors");
 const { successResponse } = require("./responseController");
-const Product = require("../models/productModal");
 const {
     createProduct,
     getAllProducts,
+    getProduct,
 } = require("../services/productServices");
 
 const handleCreateProduct = async (req, res, next) => {
@@ -50,7 +49,23 @@ const handleGetAllProducts = async (req, res, next) => {
     }
 };
 
+const handleGetProduct = async (req, res, next) => {
+    try {
+        const { slug } = req.params;
+        console.log(slug);
+        const product = await getProduct(slug);
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Product fetched successfully",
+            payload: product,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     handleCreateProduct,
     handleGetAllProducts,
+    handleGetProduct,
 };
