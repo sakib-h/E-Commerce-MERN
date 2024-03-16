@@ -64,8 +64,21 @@ const handleGetProduct = async (req, res, next) => {
     }
 };
 
+const handleDeleteProduct = async (req, res, next) => {
+    try {
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Product deleted successfully",
+            payload: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     handleCreateProduct,
     handleGetAllProducts,
     handleGetProduct,
+    handleDeleteProduct,
 };

@@ -3,6 +3,7 @@ const {
     handleCreateProduct,
     handleGetAllProducts,
     handleGetProduct,
+    handleDeleteProduct,
 } = require("../controllers/productController");
 const upload = require("../middlewares/fileUpload");
 const { validateProduct } = require("../validators/product");
@@ -27,5 +28,8 @@ productRouter.get("/", handleGetAllProducts);
 
 // POST: /api/products/:slug --> GEt PRODUCT
 productRouter.get("/:slug", handleGetProduct);
+
+// DELETE: /api/products/:slug --> DELETE SINGLE PRODUCT
+productRouter.delete("/:slug", isLoggedIn, isAdmin, handleDeleteProduct);
 
 module.exports = productRouter;
