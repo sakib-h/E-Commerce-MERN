@@ -72,7 +72,7 @@ const handleDeleteProduct = async (req, res, next) => {
         return successResponse(res, {
             statusCode: 200,
             message: "Product deleted successfully",
-            payload: "response",
+            payload: response,
         });
     } catch (error) {
         next(error);

@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const createError = require("http-errors");
-const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routers/userRouter");
@@ -22,7 +21,6 @@ const limiter = rateLimit({
 
 // express middleware
 app.use(morgan("dev"));
-app.use(xssClean());
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,6 +32,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/seed", seedRouter);
+
 
 //  client error handling
 app.use((req, res, next) => {
