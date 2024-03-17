@@ -68,10 +68,74 @@ const getProduct = async (slug) => {
     return product;
 };
 
+const updateProduct = async (req) => {
+    try {
+        const { slug } = req.params;
+
+        const updateOptions = {
+            new: true,
+            runValidators: true,
+            context: "query",
+        };
+        let updates = {};
+
+        const updateItems = [
+            "name",
+            "description",
+            "price",
+            "sold",
+            "quantity",
+            "shipping",
+        ];
+
+        for (const key in req.body) {
+            if (updateItems.includes(key)) {
+                updates[key] = req.body[key];
+            }
+        }
+
+        const image = req.file;
+        if (image) {
+            // Maximum image size 2 MB
+            if (image.size > 2097152) {
+                throw createError(
+                    400,
+                    "File too large! Image size must be less than 2MB"
+                );
+            }
+            updates.image = image.buffer.toString("base64");
+        }
+
+        const updateProduct = await Product.findOneAndUpdate(
+            slug,
+            updates,
+            updateOptions
+        );
+
+        if (!updateProduct)
+            throw createError(
+                404,
+                "Product not found or user not authorized to update product"
+            );
+        return updateProduct;
+    } catch (error) {
+        if (error instanceof mongoose.Error.CastError) {
+            throw createError(400, "Invalid user id");
+        }
+        throw error;
+    }
+};
+
 const deleteProduct = async (slug) => {
     const response = await Product.findOneAndDelete({ slug: slug });
     if (!response) throw createError(404, "Product not found");
     return response;
 };
 
-module.exports = { createProduct, getAllProducts, getProduct, deleteProduct };
+module.exports = {
+    createProduct,
+    getAllProducts,
+    getProduct,
+    updateProduct,
+    deleteProduct,
+};

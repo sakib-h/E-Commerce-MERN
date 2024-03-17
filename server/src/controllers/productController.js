@@ -4,6 +4,7 @@ const {
     getAllProducts,
     getProduct,
     deleteProduct,
+    updateProduct,
 } = require("../services/productServices");
 
 const handleCreateProduct = async (req, res, next) => {
@@ -65,6 +66,19 @@ const handleGetProduct = async (req, res, next) => {
     }
 };
 
+const handleUpdateProduct = async (req, res, next) => {
+    try {
+        const updatedProduct = await updateProduct(req);
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Product updated successfully",
+            payload: updatedProduct,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const handleDeleteProduct = async (req, res, next) => {
     try {
         const { slug } = req.params;
@@ -83,5 +97,6 @@ module.exports = {
     handleCreateProduct,
     handleGetAllProducts,
     handleGetProduct,
+    handleUpdateProduct,
     handleDeleteProduct,
 };

@@ -4,6 +4,7 @@ const {
     handleGetAllProducts,
     handleGetProduct,
     handleDeleteProduct,
+    handleUpdateProduct,
 } = require("../controllers/productController");
 const upload = require("../middlewares/fileUpload");
 const { validateProduct } = require("../validators/product");
@@ -28,6 +29,15 @@ productRouter.get("/", handleGetAllProducts);
 
 // POST: /api/products/:slug --> GEt PRODUCT
 productRouter.get("/:slug", handleGetProduct);
+
+// PUT: /api/products/:slug --> UPDATE SINGLE PRODUCT
+productRouter.put(
+    "/:slug",
+    upload.single("image"),
+    isLoggedIn,
+    isAdmin,
+    handleUpdateProduct
+);
 
 // DELETE: /api/products/:slug --> DELETE SINGLE PRODUCT
 productRouter.delete("/:slug", isLoggedIn, isAdmin, handleDeleteProduct);
