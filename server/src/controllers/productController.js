@@ -3,6 +3,7 @@ const {
     createProduct,
     getAllProducts,
     getProduct,
+    deleteProduct,
 } = require("../services/productServices");
 
 const handleCreateProduct = async (req, res, next) => {
@@ -66,10 +67,12 @@ const handleGetProduct = async (req, res, next) => {
 
 const handleDeleteProduct = async (req, res, next) => {
     try {
+        const { slug } = req.params;
+        const response = await deleteProduct(slug);
         return successResponse(res, {
             statusCode: 200,
             message: "Product deleted successfully",
-            payload: {},
+            payload: "response",
         });
     } catch (error) {
         next(error);
