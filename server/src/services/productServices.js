@@ -90,12 +90,11 @@ const updateProduct = async (req) => {
 
         for (const key in req.body) {
             if (updateItems.includes(key)) {
+                if (key === "name") {
+                    updates.slug = slugify(req.body[key]);
+                }
                 updates[key] = req.body[key];
             }
-        }
-
-        if (updates.name) {
-            updates.slug = slugify(updates.name);
         }
 
         const image = req.file;
