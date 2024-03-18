@@ -94,6 +94,10 @@ const updateProduct = async (req) => {
             }
         }
 
+        if (updates.name) {
+            updates.slug = slugify(updates.name);
+        }
+
         const image = req.file;
         if (image) {
             // Maximum image size 2 MB
@@ -107,7 +111,7 @@ const updateProduct = async (req) => {
         }
 
         const updateProduct = await Product.findOneAndUpdate(
-            slug,
+            { slug },
             updates,
             updateOptions
         );

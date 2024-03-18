@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const serverPort = process.env.SERVER_PORT || 3001;
 const mongodbURL = process.env.MONGODB_URL;
 const defaultImagePath =
@@ -12,11 +10,11 @@ const jwtActivationKey =
 
 const jwtAccessKey = process.env.JWT_ACCESS_KEY;
 const jwtResetKey = process.env.JWT_RESET_KEY;
+const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
 
 const smtpUsername = process.env.SMTP_USERNAME || "sakib100.sa@gmail.com";
 const smtpPassword = process.env.SMTP_PASSWORD;
 const clientURL = process.env.CLIENT_URL;
-const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
 
 module.exports = {
     serverPort,

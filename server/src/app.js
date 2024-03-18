@@ -33,7 +33,6 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/seed", seedRouter);
 
-
 //  client error handling
 app.use((req, res, next) => {
     next(createError(404, "Page not found"));
